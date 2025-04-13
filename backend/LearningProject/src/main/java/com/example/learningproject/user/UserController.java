@@ -8,10 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -35,15 +32,46 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Long register(@RequestBody User user) {
+    public ResponseEntity<HashMap<String,List<String>>> register(@RequestBody User user) {
         String user_string = user.toString();
         logger.info(user_string);
-        return userService.registerUser(user);
+        HashMap<String,List<String>> response = userService.checkForErros(user);
+        if (response.get("errors").isEmpty()) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+
     }
 
     @GetMapping("/getallusers")
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<User>> getUser(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            logger.info(user.toString());
+            return ResponseEntity.ok(user);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            logger.info(user.toString());
+            userService.deleteUser(user.get());
+            return new ResponseEntity<>("Sucessful deletion", HttpStatus.OK);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
