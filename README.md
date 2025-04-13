@@ -1,7 +1,9 @@
 # OnlineLearningPlatform
 
-IN PROGRESS!
+IN PROGRESS! 
+
 Learning Platform API
+
 A Spring Boot REST API backend for an educational platform. Provides user management and course enrollment functionality to support a ( In Future )React frontend learning application.
 
 Key Features:
