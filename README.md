@@ -14,5 +14,5 @@ Key Features:
 
 Tech Stack:
 * Java/Spring Boot backend
- *JWT authentication
+* JWT authentication
 * RESTful design
