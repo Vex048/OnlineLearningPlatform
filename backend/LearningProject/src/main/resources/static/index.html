@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>User Management API</h1>
+<p>API endpoints for managing users in the learning platform</p>
+
+
+<section>
+    <h2>User Endpoints</h2>
+
+    <div class="endpoint">
+        <h3>Register Single User</h3>
+        <p><span class="method">POST</span> <span class="path">/api/v1/user/register</span></p>
+
+        <h4>Request Body</h4>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td>String</td>
+                <td>Must be unique</td>
+            </tr>
+            <tr>
+                <td>username</td>
+                <td>String</td>
+                <td>Must be unique</td>
+            </tr>
+            <tr>
+                <td>firstName</td>
+                <td>String</td>
+                <td>User's first name</td>
+            </tr>
+            <tr>
+                <td>lastName</td>
+                <td>String</td>
+                <td>User's last name</td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td>String</td>
+                <td>Will be salted</td>
+            </tr>
+        </table>
+
+        <h4>Example Request</h4>
+        <pre>{
+    "email": "student@university.edu",
+    "username": "jdoe2023",
+    "firstName": "John",
+    "lastName": "Doe",
+    "password": "securePass123"
+}</pre>
+
+        <h4>Responses</h4>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>200</td>
+                <td>User registered successfully</td>
+            </tr>
+            <tr>
+                <td>409</td>
+                <td>Email or username already exists</td>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Invalid request data</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="endpoint">
+        <h3>Batch User Registration</h3>
+        <p><span class="method">POST</span> <span class="path">/api/v1/user/registerMultipleUsers</span></p>
+
+        <h4>Request Body</h4>
+        <p>Array of user objects (same structure as single registration)</p>
+
+        <h4>Responses</h4>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>200</td>
+                <td>All users registered successfully</td>
+            </tr>
+            <tr>
+                <td>207</td>
+                <td>Partial success (check response for details)</td>
+            </tr>
+            <tr>
+                <td>409</td>
+                <td>All registrations failed</td>
+            </tr>
+        </table>
+
+        <h4>Example Response (207)</h4>
+        <pre>{
+    "successes": [
+        "User student1@university.edu registered"
+    ],
+    "errors": [
+        "User student2@university.edu: email exists",
+        "User jsmith: username exists"
+    ]
+}</pre>
+    </div>
+
+    <div class="endpoint">
+        <h3>Get User</h3>
+        <p><span class="method">GET</span> <span class="path">/api/v1/user/{id}</span></p>
+
+        <h4>Responses</h4>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>200</td>
+                <td>Returns user data</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>User not found</td>
+            </tr>
+        </table>
+
+        <h4>Example Response</h4>
+        <pre>{
+    "id": 123,
+    "email": "student@university.edu",
+    "username": "jdoe2023",
+    "firstName": "John",
+    "lastName": "Doe",
+    "createdAt": "2023-11-15T10:30:00Z"
+}</pre>
+    </div>
+</section>
+
+
+</body>
+</html>
