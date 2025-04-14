@@ -1,7 +1,11 @@
 package com.example.learningproject.user;
 
 
+import com.example.learningproject.role.Role;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "app_user") // Apparently user word is resereved in h2
@@ -14,7 +18,15 @@ public class User {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-
+        this.roles = new HashSet<>();
+    }
+    public User(String email, String password,String username, String firstName, String lastName,Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.roles = roles;
     }
     @Override
     public String toString(){
@@ -24,6 +36,7 @@ public class User {
                 ", username='" + this.username + '\'' +
                 ", firstName='" + this.firstName + '\'' +
                 ", lastName='" + this.lastName + '\'' +
+                ", roles=" + this.roles + '\'' +
                 '}';
     }
 
@@ -41,6 +54,10 @@ public class User {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
+    @ManyToMany
+    @JoinTable(name="roles",joinColumns = @JoinColumn(name="user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -88,5 +105,16 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

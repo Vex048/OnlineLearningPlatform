@@ -1,5 +1,6 @@
 package com.example.learningproject.user;
 
+import com.example.learningproject.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,5 +96,6 @@ public class UserService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
 
 }
