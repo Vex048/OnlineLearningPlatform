@@ -33,5 +33,16 @@ public class RoleController {
             return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping("/deleteRole/{id}/{role}")
+    public ResponseEntity<String> deleteRole(@PathVariable Long id, @PathVariable String role){
+        Map<String,String> response = roleService.removeRoleFromUser(id, role);
+        logger.info(response.toString());
+        if (response.get("succes") != null) {
+            return new ResponseEntity<>(response.get("succes"), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

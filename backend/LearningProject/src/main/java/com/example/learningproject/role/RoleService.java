@@ -35,6 +35,21 @@ public class RoleService {
             return map;
         }
     }
+    public Map<String,String> removeRoleFromUser(Long id, String role_str) {
+        Map<String, String> map = new HashMap<>();
+        Optional<User> user = userRepository.findById(id);
+        Optional<Role> role = roleRepository.findByRoleName(role_str);
+        if (user.isPresent() && role.isPresent()){
+            user.get().removeRole(role.get());
+            userRepository.save(user.get());
+            map.put("succes","Succesfully deleted from " + user.get().getEmail());
+            return map;
+        }
+        else {
+            map.put("error","There was an error deleting role from user");
+            return map;
+        }
+    }
 
 
 }
