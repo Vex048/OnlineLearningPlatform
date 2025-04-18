@@ -29,6 +29,7 @@ public class Role {
     @JsonBackReference // Hide users when fetching
     private Set<User> users;
 
+
     public Long getId() {
         return id;
     }
@@ -51,5 +52,9 @@ public class Role {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+    @Override
+    public String toString() {
+        return "Role{id=" + this.id + ", roleName=" + this.roleName + ", users=" + this.users + '}';
     }
 }

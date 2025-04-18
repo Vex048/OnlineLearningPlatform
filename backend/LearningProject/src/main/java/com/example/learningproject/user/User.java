@@ -42,7 +42,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -110,7 +110,9 @@ public class User {
     public Set<Role> getRoles() {
         return roles;
     }
-
+    public int CountRoles() {
+        return roles.size();
+    }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
