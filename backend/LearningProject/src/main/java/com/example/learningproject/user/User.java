@@ -1,6 +1,7 @@
 package com.example.learningproject.user;
 
 
+import com.example.learningproject.course.Course;
 import com.example.learningproject.role.Role;
 import jakarta.persistence.*;
 
@@ -19,6 +20,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = new HashSet<>();
+        this.courses = new HashSet<>();
     }
     public User(String email, String password,String username, String firstName, String lastName,Set<Role> roles) {
         this.email = email;
@@ -27,6 +29,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = roles;
+        this.courses = new HashSet<>();
     }
     @Override
     public String toString(){
@@ -37,6 +40,7 @@ public class User {
                 ", firstName='" + this.firstName + '\'' +
                 ", lastName='" + this.lastName + '\'' +
                 ", roles=" + this.roles + '\'' +
+                ", roles=" + this.courses + '\'' +
                 '}';
     }
 
@@ -58,6 +62,9 @@ public class User {
     @JoinTable(name="roles",joinColumns = @JoinColumn(name="user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Course> courses;
 
     public Long getId() {
         return this.id;
@@ -121,5 +128,15 @@ public class User {
     }
     public void removeRole(Role role) {
         this.roles.remove(role);
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+    }
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+    }
+    public Set<Course> getCourses() {
+        return this.courses;
     }
 }
