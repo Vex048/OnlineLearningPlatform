@@ -63,7 +63,10 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "owner")
+    //CascadeType.ALl działa w ten sposób,
+    // ze operacja na encji User jset przenoszona autoamtycznie na powiawane obiekty Course,
+    // Czyli przy zapisie użytokowika, kurs także się zapisze
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
     private Set<Course> courses;
 
     public Long getId() {

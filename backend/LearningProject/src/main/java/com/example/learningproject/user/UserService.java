@@ -1,5 +1,6 @@
 package com.example.learningproject.user;
 
+import com.example.learningproject.course.Course;
 import com.example.learningproject.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,6 +80,10 @@ public class UserService {
         response.put("errors",errors);
         response.put("succeses",success);
         return response;
+    }
+    public void addUserToCourse(User user, Course course) {
+        user.addCourse(course);
+        userRepository.save(user);
     }
 
 

@@ -8,6 +8,11 @@ import jdk.jfr.Enabled;
 @Entity
 public class Course {
 
+    public Course(String description, String title,User owner) {
+        this.description = description;
+        this.title = title;
+        this.owner = owner;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,6 +23,12 @@ public class Course {
     @ManyToOne
     @JoinColumn(name="owner_id")
     private User owner;
+
+
+    @Override
+    public String toString() {
+        return "Course{id=" + this.id + ", description: " + this.description + ", title:" + this.title + ", owner" + this.owner.toString() +  "}" ;
+    }
 
     public Long getId() {
         return id;

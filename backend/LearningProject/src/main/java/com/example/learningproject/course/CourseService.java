@@ -1,6 +1,7 @@
 package com.example.learningproject.course;
 
 import com.example.learningproject.user.User;
+import com.example.learningproject.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ import java.util.Map;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private UserService userService;
 
     public Map<String,String> addCourse(Course course) {
         Map<String,String> response = new HashMap<>();
@@ -30,6 +33,8 @@ public class CourseService {
             return response;
         }
         else {
+            courseOwner.addCourse(course);
+            course.setOwner(courseOwner);
             courseRepository.save(course);
             response.put("success","Course added");
             return response;
