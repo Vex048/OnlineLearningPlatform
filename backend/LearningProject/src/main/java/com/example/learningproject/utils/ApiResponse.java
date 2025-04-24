@@ -32,5 +32,10 @@ public class ApiResponse<T> {
     public List<String> getSuccess(){
         return this.success;
     }
-
+    public int getErrorsCount(){
+        return this.errors.size();
+    }
+    public int getSuccessCount(){
+        return this.success.size();
+    }
 }

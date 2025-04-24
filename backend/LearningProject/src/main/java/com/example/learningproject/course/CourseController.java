@@ -2,6 +2,7 @@ package com.example.learningproject.course;
 
 
 import com.example.learningproject.user.UserController;
+import com.example.learningproject.utils.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,29 @@ public class CourseController {
 
     @PostMapping("/addCourse")
     public ResponseEntity<String> addCourse(@RequestBody Course course) {
-        Map<String,String> response = courseService.addCourse(course);
-        if (response.get("success") != null) {
-            logger.info(response.get("success"));
-            return new ResponseEntity<>(response.get("success"), HttpStatus.OK);
+
+        ApiResponse<Course> response = courseService.addCourse(course);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+
         }
         else {
-            logger.info(response.get("error"));
-            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
-        }
+                for(String s: response.getErrors()){
+                    logger.error(s);
+                    return new ResponseEntity<>(s, HttpStatus.BAD_REQUEST);
+                }
+            }
+
+//        if (response.get("success") != null) {
+//            logger.info(response.get("success"));
+//            return new ResponseEntity<>(response.get("success"), HttpStatus.OK);
+//        }
+//        else {
+//            logger.info(response.get("error"));
+//            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
+//        }
+        return null;
     }
 
 }
