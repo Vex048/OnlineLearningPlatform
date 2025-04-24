@@ -81,10 +81,7 @@ public class UserService {
         response.put("succeses",success);
         return response;
     }
-    public void addUserToCourse(User user, Course course) {
-        user.addCourse(course);
-        userRepository.save(user);
-    }
+
 
 
     public Long registerUser(User user) {

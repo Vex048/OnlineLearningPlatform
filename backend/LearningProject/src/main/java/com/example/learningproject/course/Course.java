@@ -1,9 +1,13 @@
 package com.example.learningproject.course;
 
 
+import com.example.learningproject.enrollment.Enrollment;
 import com.example.learningproject.user.User;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -24,6 +28,16 @@ public class Course {
     @JoinColumn(name="owner_id")
     private User owner;
 
+    @OneToMany(mappedBy = "course")
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+    public Set<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Set<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
 
     @Override
     public String toString() {
@@ -61,4 +75,13 @@ public class Course {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+    public Set<User> getUsers() {
+        Set<User> users = new HashSet<>();
+        for (Enrollment enrollment : enrollments) {
+            users.add(enrollment.getUser());
+        }
+        return users;
+    }
+
 }

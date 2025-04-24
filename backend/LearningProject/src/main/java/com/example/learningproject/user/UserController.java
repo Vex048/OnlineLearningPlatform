@@ -62,12 +62,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
+    @DeleteMapping("delete")
+    public ResponseEntity<String> deleteUser(@RequestBody User user) {
+        Optional<User> existingUser = userService.getUserById(user.getId());
+        if (existingUser.isPresent()) {
             logger.info(user.toString());
-            userService.deleteUser(user.get());
+            userService.deleteUser(existingUser.get());
             return new ResponseEntity<>("Sucessful deletion", HttpStatus.OK);
         }
         else {

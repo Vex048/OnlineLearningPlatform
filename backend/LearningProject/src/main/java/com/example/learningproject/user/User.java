@@ -2,9 +2,11 @@ package com.example.learningproject.user;
 
 
 import com.example.learningproject.course.Course;
+import com.example.learningproject.enrollment.Enrollment;
 import com.example.learningproject.role.Role;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +22,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = new HashSet<>();
-        this.courses = new HashSet<>();
+        this.enrollments = new HashSet<>();
     }
     public User(String email, String password,String username, String firstName, String lastName,Set<Role> roles) {
         this.email = email;
@@ -29,7 +31,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = roles;
-        this.courses = new HashSet<>();
+        this.enrollments = new HashSet<>();
     }
     @Override
     public String toString(){
@@ -40,7 +42,7 @@ public class User {
                 ", firstName='" + this.firstName + '\'' +
                 ", lastName='" + this.lastName + '\'' +
                 ", roles=" + this.roles + '\'' +
-                ", roles=" + this.courses + '\'' +
+                ", enrollments=" + this.enrollments + '\'' +
                 '}';
     }
 
@@ -63,11 +65,10 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    //CascadeType.ALl działa w ten sposób,
-    // ze operacja na encji User jset przenoszona autoamtycznie na powiawane obiekty Course,
-    // Czyli przy zapisie użytokowika, kurs także się zapisze
-    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
-    private Set<Course> courses;
+    @OneToMany(mappedBy = "user")
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+
 
     public Long getId() {
         return this.id;
@@ -133,13 +134,25 @@ public class User {
         this.roles.remove(role);
     }
 
-    public void addCourse(Course course) {
-        this.courses.add(course);
+    public void addEnrollment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
     }
-    public void removeCourse(Course course) {
-        this.courses.remove(course);
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+    }
+    public void addCourse(Course course){
+        this.enrollments.add(new Enrollment(this,course,new Date()));
     }
     public Set<Course> getCourses() {
-        return this.courses;
+        Set<Course> courses = new HashSet<>();
+        for(Enrollment enrollment : enrollments){
+            courses.add(enrollment.getCourse());
+        }
+        return courses;
     }
+
+//    public void addCourse(Course course) {
+//        this.courses.add(course);
+//    }
+
 }
