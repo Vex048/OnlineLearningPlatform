@@ -43,7 +43,7 @@ public class CourseController {
 //            logger.info(response.get("error"));
 //            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
 //        }
-        return null;
+        return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

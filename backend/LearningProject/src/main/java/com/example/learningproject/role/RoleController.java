@@ -1,5 +1,6 @@
 package com.example.learningproject.role;
 
+import com.example.learningproject.utils.ApiResponse;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,25 +25,39 @@ public class RoleController {
 
     @PostMapping("/addRole/{id}/{role}")
     public ResponseEntity<String> addRole(@PathVariable Long id, @PathVariable String role) {
-        Map<String,String> response = roleService.addRoleToUser(id, role);
+        ApiResponse<Role> response = roleService.addRoleToUser(id,role);
+        //Map<String,String> response = roleService.addRoleToUser(id, role);
         logger.info(response.toString());
-        if (response.get("succes") != null) {
-            return new ResponseEntity<>(response.get("succes"), HttpStatus.OK);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+
         }
-        else{
-            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
+        else {
+            for(String s: response.getErrors()){
+                logger.error(s);
+                return new ResponseEntity<>(s, HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @PostMapping("/deleteRole/{id}/{role}")
     public ResponseEntity<String> deleteRole(@PathVariable Long id, @PathVariable String role){
-        Map<String,String> response = roleService.removeRoleFromUser(id, role);
+        ApiResponse<Role> response = roleService.removeRoleFromUser(id, role);
         logger.info(response.toString());
-        if (response.get("succes") != null) {
-            return new ResponseEntity<>(response.get("succes"), HttpStatus.OK);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+
         }
         else {
-            return new ResponseEntity<>(response.get("error"), HttpStatus.BAD_REQUEST);
+            for(String s: response.getErrors()){
+                logger.error(s);
+                return new ResponseEntity<>(s, HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }

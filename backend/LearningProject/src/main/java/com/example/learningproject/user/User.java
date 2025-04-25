@@ -42,7 +42,6 @@ public class User {
                 ", firstName='" + this.firstName + '\'' +
                 ", lastName='" + this.lastName + '\'' +
                 ", roles=" + this.roles + '\'' +
-                ", enrollments=" + this.enrollments + '\'' +
                 '}';
     }
 
