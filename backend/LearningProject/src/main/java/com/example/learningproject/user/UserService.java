@@ -2,6 +2,7 @@ package com.example.learningproject.user;
 
 import com.example.learningproject.course.Course;
 import com.example.learningproject.role.Role;
+import com.example.learningproject.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,50 +36,58 @@ public class UserService {
         }
         return erros;
     }
-    public HashMap<String,List<String>> checkForErros (List<User> users) {
-        HashMap<String,List<String>> response = new HashMap<>();
-        List<String> errors = new ArrayList<>();
-        List<String> success = new ArrayList<>();
+    public ApiResponse<User> checkForErros (List<User> users) {
+        ApiResponse<User> response = new ApiResponse<>();
         for (User user : users) {
             logger.info(user.toString());
             HashMap<String,String> map = userExists(user);
             if (map.isEmpty()) {
                 registerUser(user);
-                success.add("User " + user.getEmail() + " successfully registered" );
+                response.addSuccess("User " + user.getEmail() + " successfully registered" );
                 logger.info("User " + user.getEmail() + " successfully registered" );
             }
             else{
                 for (String key : map.keySet()) {
-                    errors.add("User " + user.getEmail()+": " + key + " already exists" );
+                    response.addError("User " + user.getEmail()+": " + key + " already exists" );
                     logger.info("User " + user.getEmail() + ": "+ key + " already exists" );
                 }
             }
 
         }
-        response.put("errors",errors);
-        response.put("succeses",success);
+        if (response.getSuccess().size() == users.size()) {
+            response.setSuccessful(true);
+        } else if (!response.getErrors().isEmpty()) {
+            response.setSuccessful(false);
+            response.setMessage("Some errors occurred");
+        }
+        else {
+            response.setSuccessful(false);
+            response.setMessage("Erros occured in every user");
+        }
         return response;
     }
-    public HashMap<String,List<String>> checkForErros (User user) {
-        HashMap<String,List<String>> response = new HashMap<>();
-        List<String> errors = new ArrayList<>();
-        List<String> success = new ArrayList<>();
+    public ApiResponse<User> checkForErros (User user) {
+        ApiResponse<User> response = new ApiResponse<>();
         logger.info(user.toString());
         HashMap<String,String> map = userExists(user);
         if (map.isEmpty()) {
             registerUser(user);
-            success.add("User " + user.getEmail() + " successfully registered" );
+            response.addSuccess("User " + user.getEmail() + " successfully registered" );
             logger.info("User " + user.getEmail() + " successfully registered" );
         }
         else{
             for (String key : map.keySet()) {
-                errors.add("User " + user.getEmail()+": " + key + " already exists" );
+                response.addError("User " + user.getEmail()+": " + key + " already exists" );
                 logger.info("User " + user.getEmail() + ": "+ key + " already exists" );
             }
         }
-
-        response.put("errors",errors);
-        response.put("succeses",success);
+        if (response.getErrors().size() == 0 && response.getSuccess().size() == 1) {
+            response.setSuccessful(true);
+        }
+        else {
+            response.setSuccessful(false);
+            response.setMessage("Erros occured user");
+        }
         return response;
     }
 

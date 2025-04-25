@@ -1,4 +1,5 @@
 package com.example.learningproject.user;
+import com.example.learningproject.utils.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,29 +19,46 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/registerMultipleUsers")
-    public ResponseEntity<HashMap<String,List<String>>> registerMultipleUsers(@RequestBody List<User> users) {
-        HashMap<String,List<String>> response = userService.checkForErros(users);
-        if (response.get("errors").isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else if (response.get("errors").size() == users.size()) {
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    public ResponseEntity<String> registerMultipleUsers(@RequestBody List<User> users) {
+        ApiResponse<User> response = userService.checkForErros(users);
+        StringBuilder error_msg = new StringBuilder();
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+
         }
         else {
-            return new ResponseEntity<>(response, HttpStatus.MULTI_STATUS);
+            for (String error : response.getErrors()) {
+                error_msg.append(error);
+                error_msg.append("\n");
+            }
+            if (response.getMessage() != null) {
+                return new ResponseEntity<>(response.getMessage(), HttpStatus.MULTI_STATUS);
+            }
+            return new ResponseEntity<>(error_msg.toString(), HttpStatus.BAD_REQUEST);
         }
+
 
     }
 
     @PostMapping("/register")
-    public ResponseEntity<HashMap<String,List<String>>> register(@RequestBody User user) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         String user_string = user.toString();
         logger.info(user_string);
-        HashMap<String,List<String>> response = userService.checkForErros(user);
-        if (response.get("errors").isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        ApiResponse<User> response = userService.checkForErros(user);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+
         }
+        else {
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

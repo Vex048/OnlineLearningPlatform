@@ -34,9 +34,10 @@ public class RoleController {
 
         }
         else {
-            for(String s: response.getErrors()){
-                logger.error(s);
-                return new ResponseEntity<>(s, HttpStatus.BAD_REQUEST);
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,9 +52,10 @@ public class RoleController {
 
         }
         else {
-            for(String s: response.getErrors()){
-                logger.error(s);
-                return new ResponseEntity<>(s, HttpStatus.BAD_REQUEST);
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);

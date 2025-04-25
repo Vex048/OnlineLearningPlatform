@@ -7,6 +7,7 @@ public class ApiResponse<T> {
     private List<String> errors;
     private List<String> success;
     private boolean successful;
+    private String message;
 
     public ApiResponse(T data){
         this.data = data;
@@ -37,5 +38,11 @@ public class ApiResponse<T> {
     }
     public int getSuccessCount(){
         return this.success.size();
+    }
+    public String getMessage(){
+        return this.message;
+    }
+    public void setMessage(String message){
+        this.message = message;
     }
 }
