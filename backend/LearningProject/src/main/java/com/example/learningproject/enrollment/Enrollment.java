@@ -32,6 +32,11 @@ public class Enrollment {
     @Column
     private Date enrollment_date;
 
+    @Override
+    public String toString() {
+        return "Enrollment{ " + "enrollment_date: " +enrollment_date + " user: " + user + " course: " + course + "}";
+    }
+
     public Course getCourse() {
         return course;
     }

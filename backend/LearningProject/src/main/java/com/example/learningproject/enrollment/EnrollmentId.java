@@ -11,6 +11,7 @@ public class EnrollmentId implements Serializable {
         this.user = user_id;
         this.course = course_id;
     }
+    public EnrollmentId() {}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
