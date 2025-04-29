@@ -4,6 +4,9 @@ package com.example.learningproject.user;
 import com.example.learningproject.course.Course;
 import com.example.learningproject.enrollment.Enrollment;
 import com.example.learningproject.role.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -62,9 +65,11 @@ public class User {
     @ManyToMany
     @JoinTable(name="roles",joinColumns = @JoinColumn(name="user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnoreProperties("users")
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "user-enrollments")
     private Set<Enrollment> enrollments = new HashSet<>();
 
 
@@ -142,6 +147,7 @@ public class User {
     public void addCourse(Course course){
         this.enrollments.add(new Enrollment(this,course,new Date()));
     }
+    @JsonIgnore
     public Set<Course> getCourses() {
         Set<Course> courses = new HashSet<>();
         for(Enrollment enrollment : enrollments){

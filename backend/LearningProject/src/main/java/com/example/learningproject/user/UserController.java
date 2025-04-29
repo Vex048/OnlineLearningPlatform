@@ -72,7 +72,7 @@ public class UserController {
     public ResponseEntity<Optional<User>> getUser(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
-            logger.info(user.toString());
+            //logger.info(user.toString());
             return ResponseEntity.ok(user);
         }
         else {

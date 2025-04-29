@@ -29,11 +29,13 @@ public class RoleService {
             user.get().addRole(role.get());
             userRepository.save(user.get());
             response.addSuccess("Succesfully added role to " + user.get().getEmail());
+            response.setSuccessful(true);
             //map.put("succes","Succesfully added role to " + user.get().getEmail());
             return response;
         }
         else {
             response.addError("There was an error adding role to user");
+            response.setSuccessful(false);
             return response;
         }
     }

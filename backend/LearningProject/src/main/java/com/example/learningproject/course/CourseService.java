@@ -1,6 +1,7 @@
 package com.example.learningproject.course;
 
 import com.example.learningproject.user.User;
+import com.example.learningproject.user.UserRepository;
 import com.example.learningproject.user.UserService;
 import com.example.learningproject.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -15,6 +17,8 @@ public class CourseService {
     private CourseRepository courseRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     public ApiResponse<Course> addCourse(Course course) {
         ApiResponse<Course> apiResponse = new ApiResponse<>(course);
@@ -46,5 +50,9 @@ public class CourseService {
             //response.put("success","Course added");
             return apiResponse;
         }
+    }
+
+    public Optional<Course> getCourseById(Long id) {
+        return courseRepository.findById(id);
     }
 }

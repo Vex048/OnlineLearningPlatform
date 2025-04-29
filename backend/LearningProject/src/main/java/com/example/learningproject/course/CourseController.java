@@ -1,6 +1,7 @@
 package com.example.learningproject.course;
 
 
+import com.example.learningproject.user.User;
 import com.example.learningproject.user.UserController;
 import com.example.learningproject.utils.ApiResponse;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/course")
@@ -38,5 +40,17 @@ public class CourseController {
 
         return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Course>> getCourse(@PathVariable Long id) {
+        Optional<Course> course = courseService.getCourseById(id);
+        if(course.isPresent()) {
+            return ResponseEntity.ok(course);
+        }
+        else {
+            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

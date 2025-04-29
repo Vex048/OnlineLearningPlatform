@@ -1,11 +1,12 @@
 package com.example.learningproject.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApiResponse<T> {
     private T data;
-    private List<String> errors;
-    private List<String> success;
+    private List<String> errors = new ArrayList<>();
+    private List<String> success = new ArrayList<>();
     private boolean successful;
     private String message;
 

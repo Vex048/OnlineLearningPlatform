@@ -4,6 +4,7 @@ package com.example.learningproject.role;
 import com.example.learningproject.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -26,7 +27,7 @@ public class Role {
     @Column(unique = true)
     private String roleName;
     @ManyToMany(mappedBy = "roles")
-    @JsonBackReference // Hide users when fetching
+    @JsonIgnoreProperties("roles")
     private Set<User> users;
 
 

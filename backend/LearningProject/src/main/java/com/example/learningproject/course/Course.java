@@ -3,6 +3,7 @@ package com.example.learningproject.course;
 
 import com.example.learningproject.enrollment.Enrollment;
 import com.example.learningproject.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 
@@ -17,6 +18,7 @@ public class Course {
         this.title = title;
         this.owner = owner;
     }
+    public Course() {}
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -29,6 +31,7 @@ public class Course {
     private User owner;
 
     @OneToMany(mappedBy = "course")
+    @JsonManagedReference(value = "course-enrollments")
     private Set<Enrollment> enrollments = new HashSet<>();
 
     public Set<Enrollment> getEnrollments() {

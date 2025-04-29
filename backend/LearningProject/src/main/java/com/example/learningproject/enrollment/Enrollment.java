@@ -3,6 +3,7 @@ package com.example.learningproject.enrollment;
 
 import com.example.learningproject.course.Course;
 import com.example.learningproject.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -19,11 +20,13 @@ public class Enrollment {
     @Id
     @ManyToOne
     @JoinColumn(name="course_id")
+    @JsonBackReference(value = "course-enrollments")
     private Course course;
 
     @Id
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonBackReference(value = "user-enrollments")
     private User user;
 
     @Column

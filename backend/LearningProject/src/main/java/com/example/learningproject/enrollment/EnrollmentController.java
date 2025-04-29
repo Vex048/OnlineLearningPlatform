@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/enrollment")
+@RequestMapping("/api/v1/enrollment")
 public class EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
