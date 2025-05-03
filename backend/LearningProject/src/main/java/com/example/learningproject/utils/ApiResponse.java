@@ -16,6 +16,12 @@ public class ApiResponse<T> {
     public ApiResponse(){
 
     }
+    public T getData() {
+        return data;
+    }
+    public void setData(T data) {
+        this.data = data;
+    }
     public void addError(String error){
         this.errors.add(error);
     }

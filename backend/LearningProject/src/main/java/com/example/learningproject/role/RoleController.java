@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +57,23 @@ public class RoleController {
         }
         return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRole(@PathVariable Long id){
+        ApiResponse<Role> response = roleService.getRole(id);
+        logger.info(response.toString());
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getData(),HttpStatus.OK);
+        }
+        else {
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

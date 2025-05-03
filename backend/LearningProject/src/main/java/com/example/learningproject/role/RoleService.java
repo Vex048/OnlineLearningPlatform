@@ -54,6 +54,20 @@ public class RoleService {
             return response;
         }
     }
+    public ApiResponse<Role> getRole(Long id) {
+        ApiResponse<Role> response = new ApiResponse<>();
+        Optional<Role> role = roleRepository.findById(id);
+        if (role.isPresent()) {
+            response.setData(role.get());
+            response.setSuccessful(true);
+            response.addSuccess("Succesfully retrieved role " + role.get().getRoleName());
+        }
+        else {
+            response.setSuccessful(false);
+            response.addError("There was an error retrieving role from user");
+        }
+        return response;
+    }
 
 
 }
