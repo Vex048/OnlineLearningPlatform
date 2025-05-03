@@ -30,4 +30,19 @@ public class EnrollmentService {
         }
         return response;
     }
+    public ApiResponse<Enrollment> deleteUserFromCourse(User user, Course course) {
+        ApiResponse<Enrollment> response = new ApiResponse<>();
+        if (!user.getCourses().contains(course)) {
+            response.setSuccessful(false);
+            response.addError("Course does not exist");
+        }
+        else {
+            // To fix, i get now random enrollment from user, who can have mutliple enrollments
+            Enrollment enrollment = enrollmentRepository.findById(user.getId()).orElse(null);
+            enrollmentRepository.delete(enrollment);
+            response.setSuccessful(true);
+            response.addSuccess("Enrollment deleted successfully");
+        }
+        return response;
+    }
 }

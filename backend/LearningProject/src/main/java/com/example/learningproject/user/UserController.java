@@ -92,4 +92,20 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("update")
+    public ResponseEntity<String> updateUser(@RequestBody User user) {
+        ApiResponse<User> response = userService.updateUser(user);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+        }
+        else {
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>("Something went wrong in the server", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

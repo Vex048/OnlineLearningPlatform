@@ -55,4 +55,33 @@ public class CourseService {
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id);
     }
+    public ApiResponse<Course> deleteCourse(Course course) {
+        ApiResponse<Course> apiResponse = new ApiResponse<>(course);
+        if (courseRepository.existsById(course.getId())) {
+            courseRepository.deleteById(course.getId());
+            apiResponse.addSuccess("Course deleted");
+            apiResponse.setSuccessful(true);
+        }
+        else {
+            apiResponse.addError("Course not found");
+            apiResponse.setSuccessful(false);
+        }
+        return apiResponse;
+    }
+    public ApiResponse<Course> updateCourse(Course course) {
+        ApiResponse<Course> apiResponse = new ApiResponse<>(course);
+        Course CurrentCourse = courseRepository.findById(course.getId()).get();
+        if (CurrentCourse != null) {
+            CurrentCourse.setTitle(course.getTitle());
+            CurrentCourse.setDescription(course.getDescription());
+            CurrentCourse.setOwner(course.getOwner());
+            apiResponse.addSuccess("Course updated");
+            apiResponse.setSuccessful(true);
+        }
+        else {
+            apiResponse.addError("Course not found");
+            apiResponse.setSuccessful(false);
+        }
+        return apiResponse;
+    }
 }

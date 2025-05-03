@@ -108,5 +108,22 @@ public class UserService {
         userRepository.delete(user);
     }
 
-
+    public ApiResponse<User> updateUser(User user) {
+        ApiResponse<User> response = new ApiResponse<>();
+        User existingUser = userRepository.findById(user.getId()).get();
+        if (existingUser != null){
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setUsername(user.getUsername());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            response.setSuccessful(true);
+            response.addSuccess("User " + user.getEmail() + " successfully updated" );
+        }
+        else {
+            response.setSuccessful(false);
+            response.addError("User not found");
+        }
+        return response;
+    }
 }

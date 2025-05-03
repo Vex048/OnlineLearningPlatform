@@ -48,5 +48,23 @@ public class EnrollmentController {
 
         return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @DeleteMapping("deleteUserFromCourse")
+    public ResponseEntity<String> deleteUserFromCourse(@RequestBody EnrollmentRequest enrollmentRequest) {
+        User user = enrollmentRequest.getUser();
+        Course course = enrollmentRequest.getCourse();
+        ApiResponse<Enrollment> response = enrollmentService.deleteUserFromCourse(user, course);
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>(response.getSuccess().get(0), HttpStatus.OK);
+        }
+        else {
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>("No succeses or errors", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 
