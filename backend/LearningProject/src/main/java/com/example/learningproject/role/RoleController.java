@@ -19,6 +19,8 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @PostMapping("/addRole/{id}/{role}")
     public ResponseEntity<String> addRole(@PathVariable Long id, @PathVariable String role) {
@@ -65,6 +67,24 @@ public class RoleController {
         if(response.isSuccessful()) {
             logger.info(response.getSuccess().get(0));
             return new ResponseEntity<>(response.getData(),HttpStatus.OK);
+        }
+        else {
+            if (!response.getErrors().isEmpty()) {
+                String error = response.getErrors().get(0);
+                logger.error(error);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping("/updateRole")
+    public ResponseEntity<String> updateRole(@RequestBody Role role){
+        ApiResponse<Role> response = roleService.updateRole(role);
+        logger.info(response.toString());
+        if(response.isSuccessful()) {
+            logger.info(response.getSuccess().get(0));
+            return new ResponseEntity<>("Role updated succesfully",HttpStatus.OK);
         }
         else {
             if (!response.getErrors().isEmpty()) {

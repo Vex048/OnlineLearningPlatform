@@ -68,6 +68,23 @@ public class RoleService {
         }
         return response;
     }
+    public ApiResponse<Role> updateRole(Role incomingRole) {
+        Role current_role = roleRepository.findById(incomingRole.getId()).get();
+        ApiResponse<Role> response = new ApiResponse<>();
+        if (current_role != null ) {
+            current_role.setRoleName(incomingRole.getRoleName());
+            current_role.setUsers(incomingRole.getUsers());
+            roleRepository.save(current_role);
+            response.setSuccessful(true);
+            response.addSuccess("Succesfully updated role " + current_role.getRoleName());
+        }
+        else {
+            response.setSuccessful(false);
+            response.addError("There was an error updating role");
+        }
+
+        return response;
+    }
 
 
 }
